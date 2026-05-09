@@ -2,13 +2,19 @@
 
 AI-powered app that evaluates your startup idea, checks if it can realistically hit **$1M in 6 months**, and if viable — generates a full 180-day execution roadmap.
 
+![Road to a Million Dollar Screenshot](public/screenshot.jpg)
+
 ## Features
 
+- **Idea Submission** — Describe your startup concept and let AI evaluate it instantly
 - **Viability Check** — AI evaluates your idea against market size, scalability, revenue model, time-to-revenue, and execution complexity
 - **Why Not Viable** — If your idea doesn't pass, the AI explains exactly why and suggests similar ideas that do
 - **180-Day Roadmap** — Auto-generates daily tasks, milestones, and a morning routine stack
+- **Dashboard** — Track project progress with task completion, daily plans, and morning stack
 - **Agent Chat** — Plan, audit, resource, and contact agents for ongoing execution support
-- **Daily Audits** — Track progress against your plan
+- **Daily Audits** — Track progress against your plan with end-of-day reflections
+- **Timeline View** — Visualize your 180-day journey across weeks and months
+- **Project Management** — Create, track, and delete projects with full cascade cleanup
 
 ## Supported AI Providers
 
