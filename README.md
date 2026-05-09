@@ -2,6 +2,8 @@
 
 AI-powered app that evaluates your startup idea, checks if it can realistically hit **$1M in 6 months**, and if viable — generates a full 180-day execution roadmap.
 
+**Live**: [road-to-a-million.vercel.app](https://road-to-a-million.vercel.app)
+
 ![Road to a Million Dollar Screenshot](public/screenshot.jpg)
 
 ## Features
@@ -38,9 +40,9 @@ npm install
 
 # 2. Copy env template
 cp .env.example .env
-# Edit .env and add your API key
+# Edit .env — add your AI API key and Turso database URL
 
-# 3. Setup database
+# 3. Setup database (local SQLite for dev)
 npx prisma db push
 
 # 4. Run dev server
@@ -54,16 +56,15 @@ Open [http://localhost:3000](http://localhost:3000).
 Edit `.env`:
 
 ```env
+# Database — Turso (libSQL) for production, local SQLite for dev
+DATABASE_URL="libsql://your-db-name-your-org.aws-ap-northeast-1.turso.io"
+DATABASE_AUTH_TOKEN="your-turso-auth-token"
+
 # Pick your provider: openrouter | anthropic | openai | deepseek | xiaomi
-# Leave AI_PROVIDER blank to auto-detect from whichever key is set.
 AI_PROVIDER=openrouter
 
 # Fill only the key for your chosen provider
 OPENROUTER_API_KEY=sk-or-...
-# ANTHROPIC_API_KEY=sk-ant-...
-# OPENAI_API_KEY=sk-...
-# DEEPSEEK_API_KEY=sk-...
-# XIAOMI_API_KEY=...
 ```
 
 ## How It Works
@@ -76,10 +77,25 @@ OPENROUTER_API_KEY=sk-or-...
 
 ## Tech Stack
 
-- Next.js 14, TypeScript, Tailwind CSS
-- Prisma + SQLite
-- Multi-provider AI (OpenRouter / Anthropic / OpenAI / Deepseek / Xiaomi)
+- **Framework**: Next.js 14, TypeScript, Tailwind CSS
+- **Database**: Turso (libSQL) via Prisma with driver adapters
+- **AI**: Multi-provider (OpenRouter / Anthropic / OpenAI / Deepseek / Xiaomi)
+- **Deployment**: Vercel
 
-## Deploy
+## Deploy on Vercel
 
-Works on Vercel, Railway, or any Node.js host. Set your API keys as environment variables in the deployment dashboard.
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Link and deploy
+vercel link
+vercel --prod
+```
+
+Set these environment variables in Vercel dashboard or CLI:
+
+- `DATABASE_URL` — Turso connection string
+- `DATABASE_AUTH_TOKEN` — Turso auth token
+- `AI_PROVIDER` — your chosen provider
+- Your API key (e.g. `OPENROUTER_API_KEY`)
