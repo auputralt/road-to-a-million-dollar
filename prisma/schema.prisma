@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id        String   @id @default(cuid())
+  name      String
+  idea      String
+  viable    Boolean  @default(false)
+  status    String   @default("planning") // planning | active | completed | archived
+  roadmap   String   @default("{}")       // JSON — full roadmap object
+  settings  String   @default("{}")       // JSON — per-project settings
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tasks   DailyTask[]
+  audits  AuditLog[]
+  plans   DailyPlan[]
+  actions AgentAction[]
+}
+
+model DailyTask {
+  id           String  @id @default(cuid())
+  projectId    String
+  dayNumber    Int
+  weekNumber   Int
+  monthNumber  Int
+  title        String
+  description  String
+  priority     String  @default("medium") // high | medium | low
+  timeEstimate String
+  whyItMatters String  @default("")
+  completed    Boolean @default(false)
+  morningStack Boolean @default(false)
+  createdAt    DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  projectId  String
+  dayNumber  Int
+  userInput  String
+  aiResponse String
+  createdAt  DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model DailyPlan {
+  id        String   @id @default(cuid())
+  projectId String
+  dayNumber Int
+  plan      String   // what user plans to do today
+  journal   String   // end-of-day reflection
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, dayNumber])
+}
+
+model Contact {
+  id            String    @id @default(cuid())
+  externalId    String?   @unique
+  name          String
+  email         String?
+  phone         String?
+  tag           String?
+  notes         String?
+  lastContacted DateTime?
+  createdAt     DateTime  @default(now())
+}
+
+model AgentAction {
+  id         String   @id @default(cuid())
+  projectId  String
+  agentType  String   // plan | audit | contact | resource
+  action     String   // chat | audit_submit | roadmap_update
+  summary    String
+  taskId     String?
+  createdAt  DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
